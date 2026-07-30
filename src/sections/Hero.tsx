@@ -20,12 +20,12 @@ function Counter({ target, duration = 1200 }: { target: number; duration?: numbe
 export default function Hero({ data }: { data: Dataset }) {
   const journals = data.venues.filter((v) => v.type === 'journal')
   const confs = data.venues.filter((v) => v.type === 'conference')
-  const top = data.venues[0]
+  const ccf = data.venues.filter((v) => v.level !== 'N')
   const stats = [
     { label: '收录论文', value: data.total, suffix: '篇' },
+    { label: 'CCF目录阵地（A/B/C）', value: ccf.length, suffix: '个' },
     { label: '收录期刊（标注中科院分区）', value: journals.length, suffix: '种' },
     { label: '收录会议', value: confs.length, suffix: '个' },
-    { label: '高产榜首', value: top?.count ?? 0, suffix: ` · ${top?.short ?? ''}` },
   ]
   return (
     <header className="relative overflow-hidden border-b border-slate-800">
@@ -41,10 +41,11 @@ export default function Hero({ data }: { data: Dataset }) {
           同态加密 × 无人机文献雷达
         </h1>
         <p className="mt-4 max-w-2xl text-slate-400 leading-relaxed">
-          逐期刊/会议检索 <span className="text-slate-200">{data.range}</span> 期间
+          <span className="text-slate-200">逐个遍历 CCF 推荐目录全部期刊与会议阵地</span>（网络与信息安全、计算机网络、体系结构/交叉等大类共 95 个阵地），
+          并补充收录目录外相关期刊，检索 <span className="text-slate-200">{data.range}</span> 期间
           <span className="text-slate-200">同态加密（HE / Paillier / CKKS 等）与无人机（UAV / Drone / FANET）两个主题同时出现</span>的研究论文——
           涵盖联邦学习安全聚合、隐私保护导航与控制、任务卸载、认证与通信安全等交叉方向。
-          收录范围不限于 CCF 推荐目录；期刊条目均标注中科院分区（2025年3月升级版大类）。数据抓取于 {data.generated}，经 dblp / Semantic Scholar / Crossref 三路交叉核验。
+          期刊条目均标注中科院分区（2025年3月升级版大类），阵地标注 CCF A/B/C 等级。数据抓取于 {data.generated}，经 dblp / Semantic Scholar / Crossref 三路交叉核验。
         </p>
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
           {stats.map((s) => (
